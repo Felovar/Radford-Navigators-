@@ -209,11 +209,11 @@ public class MapsActivity extends AppCompatActivity
 
         // Place user's current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
+        // MarkerOptions markerOptions = new MarkerOptions();
+        //markerOptions.position(latLng);
+        //markerOptions.title("Current Position");
         //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
+        // mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         // move map camera
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
