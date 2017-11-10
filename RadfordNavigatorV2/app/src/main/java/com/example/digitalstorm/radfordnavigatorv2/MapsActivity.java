@@ -216,6 +216,8 @@ public class MapsActivity extends AppCompatActivity
         // mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         // move map camera
+        // Need to add conditionals so that users can break the auto-focus and look around the map
+        // The current implementation allows the user to move, but it re-centers on update.
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
         mMap.animateCamera(cameraUpdate);
         //location.removeUpdates(this);
