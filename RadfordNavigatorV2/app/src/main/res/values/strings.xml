@@ -95,4 +95,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_previous_scrolling">Previous Searches</string>
+    <string name="title_activity_maps2">Map</string>
 </resources>

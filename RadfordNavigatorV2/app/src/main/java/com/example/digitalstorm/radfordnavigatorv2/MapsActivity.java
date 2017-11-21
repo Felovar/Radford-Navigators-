@@ -4,13 +4,13 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,22 +28,21 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MapsActivity extends AppCompatActivity
+class MapsActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     GoogleMap mMap;
-    SupportMapFragment mapFrag;
-    LocationRequest mLocationRequest;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
+    private SupportMapFragment mapFrag;
+    private LocationRequest mLocationRequest;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private Marker mCurrLocationMarker;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
@@ -52,6 +51,7 @@ public class MapsActivity extends AppCompatActivity
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
     }
+
 
     @Override
     public void onPause() {
@@ -63,13 +63,15 @@ public class MapsActivity extends AppCompatActivity
         }
     }
 
+
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         // Interesting option for how the map looks.
         //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        mMap.setMinZoomPreference(18f);
+        mMap.setMinZoomPreference(16f);
+        showMapTypeSelectorDialog();
+
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -83,54 +85,52 @@ public class MapsActivity extends AppCompatActivity
             } else {
                 checkLocationPermission();
             }
-        }
-        else {
+        } else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
 
         // Add a marker For all the Halls At Radford University
         LatLng Peters = new LatLng(37.135759, -80.550431);
-        LatLng FitnessCenter = new LatLng(37.137302,-80.547684 );
+        LatLng FitnessCenter = new LatLng(37.137302, -80.547684);
 
         //Moffet Quad Dorms
         LatLng Moffett = new LatLng(37.134875, -80.551544);
-        LatLng Draper = new LatLng(37.135397,-80.552204);
+        LatLng Draper = new LatLng(37.135397, -80.552204);
         LatLng Ingles = new LatLng(37.136372, -80.552408);
-        LatLng Bolling = new LatLng(37.135397,-80.550965);
-        LatLng Pocahontas = new LatLng(37.136365,-80.551010);
+        LatLng Bolling = new LatLng(37.135397, -80.550965);
+        LatLng Pocahontas = new LatLng(37.136365, -80.551010);
 
         //Governor's Quad
-        LatLng DaltonHall = new LatLng(37.136873,-80.549434);
+        LatLng DaltonHall = new LatLng(37.136873, -80.549434);
         LatLng TheBonnie = new LatLng(37.136754, -80.548136);
-        LatLng Perry = new LatLng(37.136967,-80.548882);
+        LatLng Perry = new LatLng(37.136967, -80.548882);
         LatLng Floyd = new LatLng(37.137369, -80.549654);
 
         //Needs to be sorted by Quad
 
-        LatLng Kyle = new LatLng(37.134040,-80.550307);
-        LatLng Waldron = new LatLng(37.135301,-80.549456);
-        LatLng Cook = new LatLng(37.135647,-80.548890);
+        LatLng Kyle = new LatLng(37.134040, -80.550307);
+        LatLng Waldron = new LatLng(37.135301, -80.549456);
+        LatLng Cook = new LatLng(37.135647, -80.548890);
         LatLng Washington = new LatLng(37.137144, -80.552565);
-        LatLng Walker = new LatLng(37.137803, -80.552506 );
-        LatLng Norwood= new LatLng(37.138367, -80.552645);
-        LatLng Jefferson = new LatLng(37.138581,-80.551825);
+        LatLng Walker = new LatLng(37.137803, -80.552506);
+        LatLng Norwood = new LatLng(37.138367, -80.552645);
+        LatLng Jefferson = new LatLng(37.138581, -80.551825);
         LatLng Madison = new LatLng(37.138012, -80.551905);
         LatLng Tyler = new LatLng(37.138816, -80.552555);
         LatLng Muse = new LatLng(37.140287, -80.553156);
-        LatLng CHUBS = new LatLng(37.140116,-80.551616 );
+        LatLng CHUBS = new LatLng(37.140116, -80.551616);
         LatLng McConnell = new LatLng(37.139842, -80.551139);
         LatLng Reed = new LatLng(37.139350, -80.550544);
         LatLng Curie = new LatLng(37.139994, -80.550067);
-        LatLng Preston = new LatLng(37.138950,-80.549514 );
-        LatLng Young = new LatLng(37.138300,-80.549707 );
-        LatLng Davis = new LatLng(37.138105,  -80.549248);
-        LatLng McGruffy = new LatLng(37.137872,-80.548875);
+        LatLng Preston = new LatLng(37.138950, -80.549514);
+        LatLng Young = new LatLng(37.138300, -80.549707);
+        LatLng Davis = new LatLng(37.138105, -80.549248);
+        LatLng McGruffy = new LatLng(37.137872, -80.548875);
         LatLng PorterField = new LatLng(37.138623, -80.548196);
-        LatLng Covington= new LatLng(37.137926, -80.547000 );
-        LatLng Buchanan = new LatLng(37.135377, -80.550512 );
-
-//        LatLng CenterFocus = new LatLng(37.137618, -80.550235 );
+        LatLng Covington = new LatLng(37.137926, -80.547000);
+        LatLng Buchanan = new LatLng(37.135377, -80.550512);
+        LatLng CenterFocus = new LatLng(37.137618, -80.550235);
 
 
         //Will eventually test for the button press on the main Class to add a pin
@@ -168,9 +168,55 @@ public class MapsActivity extends AppCompatActivity
         mMap.addMarker(new MarkerOptions().position(Covington).title("Covington Hall"));
         mMap.addMarker(new MarkerOptions().position(Buchanan).title("Buchanan House"));
         mMap.addMarker(new MarkerOptions().position(Moffett).title("Moffett Hall"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(CenterFocus));
     }
 
-    protected synchronized void buildGoogleApiClient() {
+    private static final CharSequence[] MAP_TYPE_ITEMS =
+            {"Road Map", "Hybrid", "Satellite", "Terrain"};
+
+    private void showMapTypeSelectorDialog() {
+        // Prepare the dialog by setting up a Builder.
+        final String fDialogTitle = "Select Map Type";
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(fDialogTitle);
+
+        // Find the current map type to pre-check the item representing the current state.
+        int checkItem = mMap.getMapType() - 1;
+
+        // Add an OnClickListener to the dialog, so that the selection will be handled.
+        builder.setSingleChoiceItems(
+                MAP_TYPE_ITEMS,
+                checkItem,
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int item) {
+                        // Locally create a finalised object.
+
+                        // Perform an action depending on which item was selected.
+                        switch (item) {
+                            case 1:
+                                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                                break;
+                            case 2:
+                                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                                break;
+                            case 3:
+                                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                                break;
+                            default:
+                                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        }
+                        dialog.dismiss();
+                    }
+                }
+        );
+
+        // Build the dialog and show it.
+        AlertDialog fMapTypeDialog = builder.create();
+        fMapTypeDialog.setCanceledOnTouchOutside(true);
+        fMapTypeDialog.show();
+    }
+    private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -178,6 +224,7 @@ public class MapsActivity extends AppCompatActivity
                 .build();
         mGoogleApiClient.connect();
     }
+
     // While location services are being used (in the map activity) this sets the interval that
     // the current location is requested. Can be adjusted to maintain battery life.
     @Override
@@ -194,22 +241,23 @@ public class MapsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
 
     @Override
-    public void onLocationChanged(Location location)
-    {
-        mLastLocation = location;
+    public void onLocationChanged(Location location) {
+        /*mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
 
         // Place user's current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        // MarkerOptions markerOptions = new MarkerOptions();
+        //MarkerOptions markerOptions = new MarkerOptions();
         //markerOptions.position(latLng);
         //markerOptions.title("Current Position");
         //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
@@ -220,11 +268,12 @@ public class MapsActivity extends AppCompatActivity
         // The current implementation allows the user to move, but it re-centers on update.
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
         mMap.animateCamera(cameraUpdate);
-        //location.removeUpdates(this);
-
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }*/
     }
 
-//    @Override
+    //    @Override
 //    public void onStatusChanged(String provider, int status, Bundle extras) {
 //      TODO
 //    }
@@ -235,11 +284,13 @@ public class MapsActivity extends AppCompatActivity
 //    }
 //
 //    @Override
-//    public void onProviderDisabled(String provider) {
-//      TODO
-//    }
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(getApplicationContext(), "GPS is off", Toast.LENGTH_LONG).show();
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    }
+
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -258,7 +309,7 @@ public class MapsActivity extends AppCompatActivity
                                 // The following should prompt the user for permissions after the explanation above
                                 ActivityCompat.requestPermissions(MapsActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
                             }
                         })
                         .create()
@@ -269,7 +320,7 @@ public class MapsActivity extends AppCompatActivity
                 // allowed or denied.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION );
+                        MY_PERMISSIONS_REQUEST_LOCATION);
             }
         }
     }
@@ -302,9 +353,12 @@ public class MapsActivity extends AppCompatActivity
                 }
                 return;
             }
-                // Other permission requests can be added here. Such as permission to store locally
-                // if we want to store saved locations.
+
+            // Other permission requests can be added here. Such as permission to store locally
+            // if we want to store saved locations.
+
         }
     }
+
 
 }

@@ -1,24 +1,22 @@
 package com.example.digitalstorm.radfordnavigatorv2;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,14 +40,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
@@ -77,7 +75,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         {
             Intent intent = new Intent(this, MapsActivity.class);
                 startActivity(intent);
-
         }
         else if(button_text.equals("Previous"))
         {
@@ -87,6 +84,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         else if(button_text.equals("Directions"))
         {
             Intent intent = new Intent(this,ScrollingActivity.class);
+            startActivity(intent);
+        }
+        else if(button_text.equals("Route"))
+        {
+            RadioGroup rg = findViewById(R.id.radioGroup2);
+            String selectedRadioValue = ((RadioButton)findViewById(rg.getCheckedRadioButtonId() )).getText().toString();
+
+            Intent intent = new Intent(this, RouteActivity.class);
+            intent.putExtra("selectedRadioValue", selectedRadioValue);
             startActivity(intent);
         }
 
